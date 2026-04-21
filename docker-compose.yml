@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "5181:5181"
+    environment:
+      # Key variable: Absorbs the external environment into the C# container
+      - OpenAI__ApiKey=${OPENAI_API_KEY}
+    volumes:
+      # The C# backend uses the "knowledge-base/..." path. Here we inject the SOP Manuals into the container
+      - ./knowledge-base:/app/knowledge-base
+      # Keeps Vector-Store State persisted outside the container, physically saving RAG references
+      - ./backend/src/Api/Data:/app/Data
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      # Enforces the URL for the Browser to contact the port exposed by the Backend
+      - VITE_API_BASE_URL=http://localhost:5181
+    depends_on:
+      - backend

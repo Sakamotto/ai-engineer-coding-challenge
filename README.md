@@ -136,7 +136,30 @@ A: This assessment is not timed. You can take as long or as little time as you w
 
 ## 🚀 How to Run this Project
 
-### 1. Configure your OpenAI API Key securely
+This repository can be started in two primary ways: via **Docker** or **Manually** running locally.
+
+### OPTION A: Docker
+
+Open the terminal in the repository root directory (`ai-engineer-coding-challenge`) and execute:
+
+**On Linux / Mac:**
+```bash
+OPENAI_API_KEY="sk-your-openai-api-key-here" docker-compose up --build
+```
+*(This will build the Frontend, the .NET 10 Backend, and link the networks).*
+
+**On Windows (PowerShell):**
+```powershell
+$env:OPENAI_API_KEY="sk-your-openai-api-key-here"; docker-compose up --build
+```
+
+The Frontend will be available at `http://localhost:5173`.
+
+---
+
+### OPTION B: Running Manually and Locally 💻
+
+#### 1. Configure your OpenAI API Key securely
 To inject your evaluation key securely into the .NET runtime, simply run this command inside the `backend/src/Api` directory:
 
 ```bash
@@ -147,14 +170,14 @@ dotnet user-secrets set "OpenAI:ApiKey" "sk-your-openai-api-key-here"
 
 *Alternative:* You may temporarily place it in the `appsettings.Development.json` under `"OpenAI": { "ApiKey": "..." }`.
 
-### 2. Start the Backend (C# .NET 10)
+#### 2. Start the Backend (C# .NET 10)
 ```bash
 cd backend
 dotnet run --project src/Api/Api.csproj
 ```
 The API should now be running on `http://localhost:5181`.
 
-### 3. Start the Frontend (React + Vite + Tailwind)
+#### 3. Start the Frontend (React + Vite + Tailwind)
 Open a new terminal window:
 ```bash
 cd frontend
@@ -163,8 +186,10 @@ npm run dev
 ```
 The application will be available at `http://localhost:5173`. 
 
-### 4. How to Test
-1. Open the Browser.
+---
+
+### Post-Access Observations
+1. Open the Browser at `http://localhost:5173`.
 2. Click **"Run Ingest"** on the right side panel to populate the local `vector-store.json`.
 3. Type a sequence like *"What is the dress code?"* and press **Ctrl + Enter**!
 
