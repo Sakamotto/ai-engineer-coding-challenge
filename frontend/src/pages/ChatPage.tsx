@@ -29,12 +29,14 @@ export function ChatPage() {
     tone: 'info',
     message: 'Checking backend health...',
   })
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    createMessage(
-      'assistant',
-      'This is a baseline scaffold. Chat, retrieval, citations, and vector-store persistence are intentionally left unimplemented for the challenge.',
-    ),
-  ])
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    return [
+      createMessage(
+        'assistant',
+        'Hello! I am your AI Assistant. I can help search the operations manual in our knowledge base. To begin, click "Run Ingest"!',
+      ),
+    ]
+  })
 
   useEffect(() => {
     let isCancelled = false
@@ -80,7 +82,7 @@ export function ChatPage() {
 
       setStatus({
         tone: response.isPlaceholder ? 'warning' : 'success',
-        message: `${response.message} Vector store: ${response.vectorStorePath}`,
+        message: `${response.message}`,
       })
     } catch (error) {
       setStatus({
@@ -94,9 +96,7 @@ export function ChatPage() {
 
   async function handleSend() {
     const trimmedDraft = draft.trim()
-    if (!trimmedDraft) {
-      return
-    }
+    if (!trimmedDraft) return
 
     const userMessage = createMessage('user', trimmedDraft)
     const nextMessages = [...messages, userMessage]
@@ -141,28 +141,36 @@ export function ChatPage() {
   }
 
   return (
-    <main className="app-shell">
-      <section className="chat-layout">
-        <header className="app-header">
-          <h1>Grocery Store SOP Assistant</h1>
-          <p>
-            A lightweight React shell for a multi-turn employee chatbot backed by a .NET 10 Web API.
-            The ingest form is prefilled with the backend-ready local path for the provided SOP file.
+    <main className="flex h-screen w-full bg-background md:flex-row flex-col overflow-hidden text-sm">
+      <section className="flex flex-col flex-1 min-w-0 border-r bg-background">
+        <header className="px-6 py-4 border-b flex-none bg-card">
+          <h1 className="text-xl font-bold">Grocery Store SOP Assistant</h1>
+          <p className="text-muted-foreground mt-1 text-xs">
+            Powered by RAG Contexts and GPT-4o Agent.
           </p>
         </header>
+        
         <StatusBanner status={status} />
-        <ChatTranscript messages={messages} />
-        <ChatComposer value={draft} onChange={setDraft} onSubmit={handleSend} isBusy={isSending} />
+        
+        <div className="flex-1 overflow-y-auto">
+           <ChatTranscript messages={messages} />
+        </div>
+        
+        <div className="flex-none p-4 pb-6 bg-background">
+          <ChatComposer value={draft} onChange={setDraft} onSubmit={handleSend} isBusy={isSending} />
+        </div>
       </section>
 
-      <aside className="sidebar">
-        <IngestPanel
-          sourcePath={sourcePath}
-          onSourcePathChange={setSourcePath}
-          onIngest={handleIngest}
-          isBusy={isIngesting}
-        />
-        <CitationsPanel citations={citations} />
+      <aside className="w-full md:w-[380px] flex-none flex flex-col bg-muted/10 overflow-y-auto border-l">
+        <div className="p-4 space-y-6">
+          <IngestPanel
+            sourcePath={sourcePath}
+            onSourcePathChange={setSourcePath}
+            onIngest={handleIngest}
+            isBusy={isIngesting}
+          />
+          <CitationsPanel citations={citations} />
+        </div>
       </aside>
     </main>
   )

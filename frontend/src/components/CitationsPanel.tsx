@@ -1,28 +1,35 @@
 import type { Citation } from '../types/chat'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface CitationsPanelProps {
   citations: Citation[]
 }
 
 export function CitationsPanel({ citations }: CitationsPanelProps) {
+  if (citations.length === 0) {
+    return (
+      <Card className="shadow-none border-dashed bg-transparent mt-4">
+        <CardContent className="p-6 text-center text-muted-foreground text-sm">
+          No citations available for the last interaction.
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
-    <section className="sidebar-card" aria-labelledby="citations-heading">
-      <h2 id="citations-heading">Citations</h2>
-      {citations.length === 0 ? (
-        <p className="empty-state">No citations yet. This panel stays empty until grounded retrieval is implemented.</p>
-      ) : (
-        <ul className="citations-list">
-          {citations.map((citation, index) => (
-            <li key={`${citation.source}-${index}`} className="citation-item">
-              <p className="citation-source">
-                {citation.source}
-                {citation.startLine ? ` (${citation.startLine}-${citation.endLine ?? citation.startLine})` : ''}
-              </p>
-              <p>{citation.snippet}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <div className="space-y-4">
+      <h3 className="font-semibold text-sm -mb-2">References ({citations.length})</h3>
+      {citations.map((citation, index) => (
+        <Card key={index} className="overflow-hidden shadow-sm">
+          <CardHeader className="py-3 px-4 bg-muted/40 border-b">
+             <CardTitle className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Source</CardTitle>
+             <p className="text-sm font-medium leading-tight">{citation.source}</p>
+          </CardHeader>
+          <CardContent className="p-4 bg-card">
+            <p className="text-xs text-muted-foreground italic">&ldquo;{citation.snippet}&rdquo;</p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   )
 }
