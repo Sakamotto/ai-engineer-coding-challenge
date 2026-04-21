@@ -16,11 +16,10 @@ builder.Services.AddCors(options =>
 	});
 });
 
-builder.Services.AddSingleton<IChunkingService, PlaceholderChunkingService>();
-builder.Services.AddSingleton<IEmbeddingService, PlaceholderEmbeddingService>();
+builder.Services.AddSingleton<IChunkingService, ChunkingService>();
+builder.Services.AddSingleton<IEmbeddingService, EmbeddingService>();
 builder.Services.AddSingleton<IVectorStoreService, FileVectorStoreService>();
-builder.Services.AddSingleton<IToolRegistryService, PlaceholderToolRegistryService>();
-builder.Services.AddSingleton<IRetrievalChatService, PlaceholderRetrievalChatService>();
+builder.Services.AddSingleton<IRetrievalChatService, RetrievalChatService>();
 
 var app = builder.Build();
 
@@ -30,3 +29,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

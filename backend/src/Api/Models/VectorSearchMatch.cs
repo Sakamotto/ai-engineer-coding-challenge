@@ -2,7 +2,7 @@ namespace Api.Models;
 
 public sealed class VectorSearchMatch
 {
-    public VectorRecord Record { get; init; } = new();
+    public required VectorRecord Record { get; init; }
 
     public double Score { get; init; }
 }
