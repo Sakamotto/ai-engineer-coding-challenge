@@ -1,7 +1,5 @@
 # Grocery Store SOP Assistant Coding Challenge
 
-## Scenario
-
 You are building an internal chatbot for a grocery store chain. Store employees should be able to ask questions about operating procedures and receive grounded answers based on the SOP document in `knowledge-base/Grocery_Store_SOP.md`. The team just wants a POC to demonstrate the concept, so you should focus on building a clear vertical slice that connects document ingestion, retrieval, and a simple chat interface.
 
 This challenge is intentionally scoped for **2-3 hours** of focused work with AI assistance. The goal is not to build a production-ready system. The goal is to demonstrate technical judgment, pragmatic scoping, and the ability to connect backend, frontend, and AI-oriented application patterns.
@@ -134,3 +132,40 @@ A: No. OpenAI function-calling is the most straightforward approach, but if you 
 
 **Q: What if I run out of time?**
 A: This assessment is not timed. You can take as long or as little time as you would like. It is scoped to take between 2-3 hours of focused work for an experienced engineer familiar with RAG. Some may finish in an hour and some may take longer. 
+
+
+## 🚀 How to Run this Project
+
+### 1. Configure your OpenAI API Key securely
+To inject your evaluation key securely into the .NET runtime, simply run this command inside the `backend/src/Api` directory:
+
+```bash
+cd backend/src/Api
+dotnet user-secrets init
+dotnet user-secrets set "OpenAI:ApiKey" "sk-your-openai-api-key-here"
+```
+
+*Alternative:* You may temporarily place it in the `appsettings.Development.json` under `"OpenAI": { "ApiKey": "..." }`.
+
+### 2. Start the Backend (C# .NET 10)
+```bash
+cd backend
+dotnet run --project src/Api/Api.csproj
+```
+The API should now be running on `http://localhost:5181`.
+
+### 3. Start the Frontend (React + Vite + Tailwind)
+Open a new terminal window:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+The application will be available at `http://localhost:5173`. 
+
+### 4. How to Test
+1. Open the Browser.
+2. Click **"Run Ingest"** on the right side panel to populate the local `vector-store.json`.
+3. Type a sequence like *"What is the dress code?"* and press **Ctrl + Enter**!
+
+---
